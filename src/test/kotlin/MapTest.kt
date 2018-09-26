@@ -25,4 +25,21 @@ class MapTest {
         assertEquals(arrayListOf(Pair(Town('B'), 5)), towns.find { it == Town('A') }?.getNeighbors())
         assertEquals(arrayListOf(Pair(Town('C'), 4)), towns.find { it == Town('B') }?.getNeighbors())
     }
+
+    @Test
+    fun shouldReturnDistanceBetweenTwoCitiesIfRouteExists() {
+        Map.createTowns("AB5", "AD3")
+        assertEquals(5, Map.calculateDistance("AB"))
+        assertEquals(3, Map.calculateDistance("AD"))
+        assertEquals(null, Map.calculateDistance("BD"))
+    }
+
+    @Test
+    fun shouldReturnDistanceGivenARouteWithMoreThanTwoTowns() {
+        Map.createTowns("AB5", "BC4", "CD8", "DE6", "AD5", "CE2", "EB3", "AE7")
+        assertEquals(5, Map.calculateDistance("AD"))
+        assertEquals(22, Map.calculateDistance("AEBCD"))
+        assertEquals(null, Map.calculateDistance("AED"))
+    }
+
 }

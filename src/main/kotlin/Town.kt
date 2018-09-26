@@ -8,4 +8,9 @@ data class Town(val name: Char) {
     fun addNeighbor(neighbor: Pair<Town, Int>) {
         this.neighbors.add(neighbor)
     }
+
+    fun hasNeighbor(town: Town): Int? {
+        val neighbor = neighbors.find{ it.first == town }
+        return neighbor?.second
+    }
 }
