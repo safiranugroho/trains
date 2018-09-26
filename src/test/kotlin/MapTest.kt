@@ -28,7 +28,7 @@ class MapTest {
 
     @Test
     fun shouldCreateRouteWithMultipleTownsAndGetDistance() {
-        Map.createTowns("AB5", "BC4", "CD8", "DE6", "AD5", "CE2", "EB3", "AE7")
+        Map.createTowns("AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7")
 
         var route = Map.createRoute("AD")
         assertEquals(5, route?.getDistance())
@@ -38,6 +38,5 @@ class MapTest {
 
         route = Map.createRoute("AED")
         assertEquals(null, route?.getDistance())
-
     }
 }

@@ -2,9 +2,12 @@ class Route(start: Town) {
     private val stops: MutableList<Town> = arrayListOf(start)
     private var distance: Int = 0
 
-    fun addStop(stop: Pair<Town, Int>) {
-        stops.add(stop.first)
-        distance += stop.second
+    fun addStop(town: Town): Boolean {
+        val neighbor = stops.last().hasNeighbor(town) ?: return false
+        stops.add(neighbor.first)
+        distance += neighbor.second
+
+        return true
     }
 
     fun getStops(): List<Town> {
@@ -13,5 +16,9 @@ class Route(start: Town) {
 
     fun getDistance(): Int {
         return distance
+    }
+
+    fun getNumberOfStops(): Int {
+        return stops.size - 1
     }
 }

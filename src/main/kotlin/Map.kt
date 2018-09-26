@@ -14,8 +14,10 @@ object Map {
             towns.add(firstTown)
             towns.add(secondTown)
 
-            towns.find{ it == firstTown }!!
-                 .addNeighbor(Pair(secondTown, distance))
+            val neighbor = towns.find{ it == secondTown }!!
+
+            towns.find{ it == firstTown }
+                ?.addNeighbor(Pair(neighbor, distance))
         }
 
         return towns
@@ -23,18 +25,15 @@ object Map {
 
     fun createRoute(input: String): Route? {
         var index = 0
-        var current = findTown(input[index]) ?: return null
+        val start = findTown(input[index]) ?: return null
 
-        val route = Route(current)
+        val route = Route(start)
 
         index++
 
         while (index < input.length) {
-            val next = findTown(input[index]) ?: return null
-            val neighbor = current.hasNeighbor(next) ?: return null
-
-            route.addStop(neighbor)
-            current = next
+            val next = Town(input[index])
+            if (!route.addStop(next)) return null
 
             index++
         }
