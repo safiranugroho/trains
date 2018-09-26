@@ -14,28 +14,31 @@ object Map {
             towns.add(firstTown)
             towns.add(secondTown)
 
-            towns.find{ it == firstTown }
-                ?.addNeighbor(Pair(secondTown, distance))
+            towns.find{ it == firstTown }!!
+                 .addNeighbor(Pair(secondTown, distance))
         }
 
         return towns
     }
 
-    fun calculateDistance(route: String): Int? {
+    fun createRoute(input: String): Route? {
         var index = 0
-        var totalDistance = 0
-        var current = findTown(route[index]) ?: return null
+        var current = findTown(input[index]) ?: return null
+
+        val route = Route(current)
 
         index++
 
-        while (index < route.length) {
-            val next = findTown(route[index]) ?: return null
-            totalDistance += current.hasNeighbor(next) ?: return null
+        while (index < input.length) {
+            val next = findTown(input[index]) ?: return null
+            val neighbor = current.hasNeighbor(next) ?: return null
+
+            route.addStop(neighbor)
             current = next
 
             index++
         }
 
-        return totalDistance
+        return route
     }
 }

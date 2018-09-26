@@ -27,19 +27,17 @@ class MapTest {
     }
 
     @Test
-    fun shouldReturnDistanceBetweenTwoCitiesIfRouteExists() {
-        Map.createTowns("AB5", "AD3")
-        assertEquals(5, Map.calculateDistance("AB"))
-        assertEquals(3, Map.calculateDistance("AD"))
-        assertEquals(null, Map.calculateDistance("BD"))
-    }
-
-    @Test
-    fun shouldReturnDistanceGivenARouteWithMoreThanTwoTowns() {
+    fun shouldCreateRouteWithMultipleTownsAndGetDistance() {
         Map.createTowns("AB5", "BC4", "CD8", "DE6", "AD5", "CE2", "EB3", "AE7")
-        assertEquals(5, Map.calculateDistance("AD"))
-        assertEquals(22, Map.calculateDistance("AEBCD"))
-        assertEquals(null, Map.calculateDistance("AED"))
-    }
 
+        var route = Map.createRoute("AD")
+        assertEquals(5, route?.getDistance())
+
+        route = Map.createRoute("AEBCD")
+        assertEquals(22, route?.getDistance())
+
+        route = Map.createRoute("AED")
+        assertEquals(null, route?.getDistance())
+
+    }
 }

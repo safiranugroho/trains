@@ -24,15 +24,15 @@ class TownTest {
     }
 
     @Test
-    fun shouldCheckIfATownHasAGivenNeighborAndReturnTheDistance() {
+    fun shouldCheckIfATownHasAGivenNeighbor() {
         val town = Town('B')
         val firstNeighbor = Pair(Town('C'), 4)
         val secondNeighbor = Pair(Town('A'), 3)
         town.addNeighbor(firstNeighbor)
         town.addNeighbor(secondNeighbor)
 
-        assertEquals(3, town.hasNeighbor(Town('A')))
-        assertEquals(4, town.hasNeighbor(Town('C')))
+        assertEquals(firstNeighbor, town.hasNeighbor(Town('C')))
+        assertEquals(secondNeighbor, town.hasNeighbor(Town('A')))
         assertEquals(null, town.hasNeighbor(Town('D')))
     }
 
