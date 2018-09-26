@@ -20,10 +20,9 @@ class MapTest {
     }
 
     @Test
-    fun shouldCreateAndConnectTownsFromStringInput() {
+    fun shouldCreateAndConnectTownsWithDistanceFromStringInput() {
         val towns: Set<Town> = Map.createTowns("AB5", "BC4")
-        assertEquals(Town('B'), towns.find { it == Town('A') }?.getNeighbors())
-        assertEquals(Town('C'), towns.find { it == Town('B') }?.getNeighbors())
+        assertEquals(arrayListOf(Pair(Town('B'), 5)), towns.find { it == Town('A') }?.getNeighbors())
+        assertEquals(arrayListOf(Pair(Town('C'), 4)), towns.find { it == Town('B') }?.getNeighbors())
     }
-
 }

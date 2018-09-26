@@ -1,11 +1,11 @@
 data class Town(val name: Char) {
-    lateinit var neighbor: Town
+    private val neighbors: MutableList<Pair<Town, Int>> = ArrayList()
 
-    fun getNeighbors(): Town {
-        return neighbor
+    fun getNeighbors(): List<Pair<Town, Int>> {
+        return this.neighbors
     }
 
-    fun addNeighbor(town: Town) {
-        neighbor = town
+    fun addNeighbor(neighbor: Pair<Town, Int>) {
+        this.neighbors.add(neighbor)
     }
 }
