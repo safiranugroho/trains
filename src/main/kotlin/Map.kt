@@ -43,8 +43,20 @@ object Map {
         return route
     }
 
-    fun getRoutes(start: Char, end: Char, maxStops: Int): List<Route> {
-        return getFilteredRoutes(end, getAllPossibleRoutes(start, end, maxStops))
+    fun getRoutes(start: Char, end: Char, noOfStops: Int): List<Route> {
+        return getFilteredRoutes(end, getAllPossibleRoutes(start, end, noOfStops))
+    }
+
+    fun getRoutesWithMaxStops(start: Char, end: Char, maxStops: Int): List<Route> {
+        var index = maxStops
+        var routes: List<Route> = ArrayList()
+
+        while (index > 0) {
+            routes = routes.plus(getRoutes(start, end, index))
+            index--
+        }
+
+        return routes
     }
 
     fun getShortestRoute(start: Char, end: Char): Route {
@@ -81,12 +93,12 @@ object Map {
         return Route(Town(start))
     }
 
-    private fun getAllPossibleRoutes(start: Char, end: Char, maxStops: Int): List<Route> {
+    private fun getAllPossibleRoutes(start: Char, end: Char, noOfStops: Int): List<Route> {
         val possibleRoutes: MutableList<Route> = ArrayList()
 
         val startingTown = towns.find { it == Town(start)}!!
 
-        if (maxStops == 0) {
+        if (noOfStops == 0) {
             val route = Route(startingTown)
             possibleRoutes.add(route)
             return possibleRoutes
@@ -94,7 +106,7 @@ object Map {
             var routes: List<Route> = ArrayList()
             val neighbors = startingTown.getNeighbors()
             for (neighbor in neighbors) {
-                routes = routes.plus(getAllPossibleRoutes(neighbor.first.name, end, maxStops - 1))
+                routes = routes.plus(getAllPossibleRoutes(neighbor.first.name, end, noOfStops - 1))
             }
 
             for (route in routes) {
