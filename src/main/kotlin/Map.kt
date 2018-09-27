@@ -16,10 +16,8 @@ object Map {
             towns.add(firstTown)
             towns.add(secondTown)
 
-            val neighbor = towns.find{ it == secondTown }!!
-
-            towns.find{ it == firstTown }
-                ?.addNeighbor(Pair(neighbor, distance))
+            val neighbor: Town = findTown(i[1])!!
+            findTown(i[0])?.addNeighbor(Pair(neighbor, distance))
         }
 
         return towns
@@ -44,7 +42,13 @@ object Map {
     }
 
     fun getRoutes(start: Char, end: Char, noOfStops: Int): List<Route> {
-        return getFilteredRoutes(end, getAllPossibleRoutes(start, end, noOfStops))
+        val routes: MutableList<Route> = ArrayList()
+
+        for (route in getFilteredRoutes(end, getAllPossibleRoutes(start, end, noOfStops))) {
+            routes.add(createRoute(route)!!)
+        }
+
+        return routes
     }
 
     fun getRoutesWithMaxStops(start: Char, end: Char, maxStops: Int): List<Route> {
@@ -65,7 +69,7 @@ object Map {
 
         val meta: MutableMap<Town, Pair<Town?, Int?>> = HashMap()
 
-        val startingTown = towns.find { it == Town(start) }!!
+        val startingTown: Town = findTown(start)!!
         meta.set(startingTown, Pair(null, null))
         queue.add(startingTown)
 
@@ -73,7 +77,7 @@ object Map {
             val nextTown = queue.removeAt(0)
 
             if (nextTown == Town(end)) {
-                return constructRoute(nextTown, meta)
+                return createRoute(constructRoute(nextTown, meta))!!
             }
 
             for (neighbor in nextTown.getNeighbors()) {
@@ -93,41 +97,41 @@ object Map {
         return Route(Town(start))
     }
 
-    private fun getAllPossibleRoutes(start: Char, end: Char, noOfStops: Int): List<Route> {
-        val possibleRoutes: MutableList<Route> = ArrayList()
 
-        val startingTown = towns.find { it == Town(start)}!!
+    private fun getAllPossibleRoutes(start: Char, end: Char, noOfStops: Int): List<StringBuilder> {
+        val possibleRoutes: MutableList<StringBuilder> = ArrayList()
+        val startingTown: Town = findTown(start)!!
 
         if (noOfStops == 0) {
-            val route = Route(startingTown)
-            possibleRoutes.add(route)
+            possibleRoutes.add(StringBuilder().append(start))
+
             return possibleRoutes
         } else {
-            var routes: List<Route> = ArrayList()
-            val neighbors = startingTown.getNeighbors()
-            for (neighbor in neighbors) {
+            var routes: List<StringBuilder> = ArrayList()
+            for (neighbor in startingTown.getNeighbors()) {
                 routes = routes.plus(getAllPossibleRoutes(neighbor.first.name, end, noOfStops - 1))
             }
 
+            val appendedRoutes: MutableList<StringBuilder> = ArrayList()
             for (route in routes) {
-                route.addStart(startingTown)
+                appendedRoutes.add(route.append(start))
             }
 
-            return routes
+            return appendedRoutes
         }
     }
 
-    private fun getFilteredRoutes(end: Char, routes: List<Route>): List<Route> {
-        val filteredRoutes: MutableList<Route> = ArrayList()
+    private fun getFilteredRoutes(end: Char, routes: List<StringBuilder>): List<String> {
+        val filteredRoutes: MutableList<String> = ArrayList()
 
         for (route in routes) {
-            filteredRoutes.add(route.reverse())
+            filteredRoutes.add(route.reverse().toString())
         }
 
-        return filteredRoutes.filter { it.getDestination() == Town(end) }
+        return filteredRoutes.filter{ it.last() == end }
     }
 
-    private fun constructRoute(destination: Town, meta: MutableMap<Town, Pair<Town?, Int?>>): Route {
+    private fun constructRoute(destination: Town, meta: MutableMap<Town, Pair<Town?, Int?>>): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append(destination.name)
 
@@ -135,10 +139,9 @@ object Map {
 
         while (meta[currentTown]?.first != null) {
             currentTown = meta[currentTown]?.first!!
-
             stringBuilder.append(currentTown.name)
         }
 
-        return createRoute(stringBuilder.reverse().toString())!!
+        return stringBuilder.reverse().toString()
     }
 }
