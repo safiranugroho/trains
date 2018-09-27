@@ -39,4 +39,34 @@ class MapTest {
         route = Map.createRoute("AED")
         assertEquals(null, route?.getDistance())
     }
+
+    @Test
+    fun shouldCreateAllPossibleRoutesGivenOneStopAndDestination() {
+        Map.createTowns("AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7")
+
+        val trips: List<Route> = Map.getRoutes('A', 'D', 1)
+
+        assertEquals(1, trips.size)
+        assertTrue(trips.contains(Map.createRoute("AD")))
+    }
+
+    @Test
+    fun shouldCreateAllPossibleRoutesGivenMaxStopsAndDestination() {
+        Map.createTowns("AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7")
+
+        val trips: List<Route> = Map.getRoutes('A', 'C', 2)
+
+        assertEquals(2, trips.size)
+        assertTrue(trips.contains(Map.createRoute("ABC")))
+    }
+
+
+    @Test
+    fun shouldCreateShortestRouteGivenTwoDestinations() {
+        Map.createTowns("AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7")
+
+        val route = Map.getShortestRoute('A', 'C')
+        assertEquals(2, route.getNumberOfStops())
+        assertEquals(Map.createRoute("ABC"), route)
+    }
 }
